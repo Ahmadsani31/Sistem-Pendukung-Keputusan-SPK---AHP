@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?= $this->load->view('_templates/_header', '', true); ?>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+</head>
+
+<body class="sb-nav-fixed">
+    <?= $this->load->view('_templates/_navbar', '', true); ?>
+    <div id="layoutSidenav">
+        <?= $this->load->view('_templates/_sidebar', '', true); ?>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4"><?= $title; ?></h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active"><?= $title; ?></li>
+                    </ol>
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <i class="fas fa-table me-1"></i>
+                            Data Kriteria
+                        </div>
+                        <div class="card-body">
+                            <h5>Matrik Perbandingan Berpasangan Kriteria</h5>
+                            <hr>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <?php
+
+                                        echo ' <th>Kriteria</th>';
+                                        foreach ($kriteria as $dataKrtiteria) {
+
+                                            echo ' <td>' . $dataKrtiteria['nama'] . '</td>';
+                                        }
+                                        ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    for ($xk = 1; $xk <= count($kriteria); $xk++) {
+                                        echo '<tr>';
+                                        echo ' <td>' . $kriteria[$xk]['nama'] . '</td>';
+                                        for ($yk = 1; $yk <= count($kriteria); $yk++) {
+                                            echo '<td>' . $Hkrit[$xk][$yk] . '</td>';
+                                            $matKritA[$yk][$xk] = round($Hkrit[$xk][$yk], 4);
+                                        }
+                                        echo '</tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                                <tfoot style="background-color: grey;color: white;">
+                                    <td><b>Hasil</b></td>
+                                    <?php
+                                    foreach ($matKritA as $nyk => $nxk) {
+                                        $HMatKritA[$nyk] = array_sum($nxk);
+                                        echo '<td>' . array_sum($nxk) . '</td>';
+                                    }
+
+                                    ?>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <div class="card-body">
+                            <h5>Hasil Matrik Normalisasi Kriteria</h5>
+                            <hr>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <?php
+                                        echo ' <th></th>';
+                                        foreach ($kriteria as $dataKrtiteria) {
+                                            echo ' <th>' . $dataKrtiteria['nama'] . '</th>';
+                                        }
+                                        ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    for ($xxk = 1; $xxk <= count($kriteria); $xxk++) {
+                                        echo '<tr>';
+                                        echo ' <td>' . @$kriteria[$xxk]['nama'] . '</td>';
+                                        for ($yyk = 1; $yyk <= count($kriteria); $yyk++) {
+
+                                            echo '<td>' . @$matKritA[@$yyk][$xxk] . '/' . @$HMatKritA[$yyk] . '</td>';
+                                        }
+                                        echo '</tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <?php
+                                        echo ' <th></th>';
+                                        foreach ($kriteria as $dataKrtiteria) {
+                                            echo ' <th>' . $dataKrtiteria['nama'] . '</th>';
+                                        }
+                                        echo ' <th style="background-color: grey;color: white;">JUMLAH (V)</th>';
+                                        echo ' <th style="background-color: grey;color: white;">PRIORITAS</th>';
+                                        echo ' <th style="background-color: grey;color: white;">EIGEN VALUE</th>';
+                                        ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    $TVektorKrit = 0;
+                                    $TBobotKrit = 0;
+                                    $TEigenKrit = 0;
+                                    for ($xk1 = 1; $xk1 <= count($kriteria); $xk1++) {
+                                        echo '<tr>';
+                                        echo ' <td>' . @$kriteria[$xk1]['nama'] . '</td>';
+                                        for ($yk1 = 1; $yk1 <= count($kriteria); $yk1++) {
+
+                                            echo '<td>' . round($matKritA[$yk1][$xk1] / $HMatKritA[$yk1], 4) . '</td>';
+                                            $HMatKritB[$xk1][$yk1] = round(@$matKritA[@$yk1][$xk1] / @$HMatKritA[$yk1], 4);
+                                            $matKritBHasil[$yk1][$xk1] = round(@$matKritA[@$yk1][$xk1], 4) / round(@$HMatKritA[$yk1], 4);
+                                        }
+                                        $TVektorKrit += array_sum($HMatKritB[$xk1]);
+                                        $TBobotKrit += round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4);
+                                        $TEigenKrit += (round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4) * $HMatKritA[$xk1]);
+                                        echo '<td style="background-color: grey;color: white;">' . array_sum($HMatKritB[$xk1]) . '</td>';
+                                        echo '<td style="background-color: grey;color: white;">' . round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4) . '</td>';
+                                        echo '<td style="background-color: grey;color: white;">' . round(round(array_sum($HMatKritB[$xk1]), 4) / count($kriteria) * round($HMatKritA[$xk1], 4), 4) . '</td>';
+
+                                        $NilaiBobotKrit[$kriteria[$xk1]['id']] = round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4);
+
+                                        echo '</tr>';
+                                    }
+
+                                    ?>
+                                </tbody>
+                                <tfoot style="background-color: grey;color: white;">
+                                    <td><b>Total</b></td>
+                                    <?php
+                                    foreach ($matKritBHasil as $nyk1 => $nxk1) {
+                                        echo '<td>' . round(array_sum($nxk1)) . '</td>';
+                                    }
+                                    echo '<td>' . round($TVektorKrit) . '</td>';
+                                    echo '<td>' . round($TBobotKrit) . '</td>';
+                                    echo '<td>' . round($TEigenKrit, 4) . '</td>';
+                                    ?>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="card-body">
+                            <h5>Nilai Bobot Kriteria</h5>
+                            <hr>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Kriteria</th>
+                                        <th>Bobot</th>
+                                        <th>Presentase</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $this->db->empty_table('nilai_kriteria');
+                                    $i = 0;
+                                    $nilai_persen = 0;
+                                    foreach ($kriteria as  $dataKrtiteria) {
+
+                                        // $insertBobot[] = [
+                                        //     'kriteriaid' => $dataKrtiteria['id'],
+                                        //     'bobot' => $NilaiBobotKrit[$dataKrtiteria['id']],
+                                        // ];
+
+                                        $nilai_persen += $NilaiBobotKrit[$dataKrtiteria['id']] * 100;
+                                        echo '<tr>';
+                                        echo ' <td>' . $dataKrtiteria['nama'] . '</td>';
+                                        echo ' <td>' . @$NilaiBobotKrit[$dataKrtiteria['id']] . '</td>';
+                                        echo ' <td>' . @$NilaiBobotKrit[$i] * 100 . ' %</td>';
+                                        echo '</tr>';
+                                        $i++;
+                                    }
+
+                                    // $this->db->insert_batch('nilai_kriteria', $insertBobot);
+                                    ?>
+                                </tbody>
+                                <tfoot style="background-color: grey;color: white;">
+                                    <td></td>
+                                    <td><b>Hasil</b></td>
+                                    <td><?= $nilai_persen; ?></td>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <?php
+
+                        $ci1 = $TEigenKrit - count($kriteria);
+                        $ci2 = count($kriteria) - 1;
+
+                        $nilai_ci = $ci1 /   $ci2;
+
+                        $nilai_cr = $nilai_ci / $nilai_ri;
+
+                        $hasil_cr =  $nilai_cr <= 0.1 ? "KONSISTEN" : "TIDAK KONSISTEN";
+                        ?>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <?php
+                                    echo '<tr>';
+                                    echo ' <th>CI</th>';
+                                    echo ' <th>' .  round($nilai_ci, 4) . '</th>';
+                                    echo '</tr>';
+                                    echo '<tr>';
+                                    echo ' <th>RI</th>';
+                                    echo ' <th>' . $nilai_ri . '</th>';
+                                    echo '</tr>';
+                                    echo '<tr>';
+                                    echo ' <th>CR</th>';
+                                    echo ' <th>' . round($nilai_cr, 4) . ' (' . $hasil_cr . ')</th>';
+                                    echo '</tr>';
+                                    ?>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <i class="fas fa-table me-1"></i>
+                            Data Alternatif
+                        </div>
+                        <?php
+
+                        foreach ($kriteria as $dKr) {
+                        ?>
+
+                            <div class="card-body">
+                                <h5>Perhitungan Data Alternatif Kriteria <b><?= $dKr['nama']; ?></b></h5>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <?php
+                                            echo ' <th></th>';
+                                            foreach ($alternatif as $dtAlter) {
+                                                echo ' <th>' . $dtAlter['nama'] . '</th>';
+                                            }
+                                            // echo ' <th>P.Vektor</th>';
+                                            // echo ' <th>Bobot</th>';
+                                            ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        for ($x = 1; $x <= count($HAlter[$dKr['id']]); $x++) {
+                                            echo '<tr>';
+                                            echo ' <td>' . $alternatif[$x]['nama'] . '</td>';
+                                            for ($y = 1; $y <= count($HAlter[$dKr['id']]); $y++) {
+                                                echo '<td>' . $HAlter[$dKr['id']][$x][$y] . '</td>';
+                                                $matrikA[$dKr['id']][$y][$x] = round($HAlter[$dKr['id']][$x][$y], 4);
+                                            }
+                                            // echo '<td>' . round(array_sum($matrikA[$dKr['id']][$x]), 4) . '</td>';
+                                            // echo '<td>' . round(array_sum($matrikA[$dKr['id']][$x]) / count($HAlter[$dKr['id']]), 4) . '</td>';
+                                            // $nBobobt[$dKr['id']][] = round(array_sum($matrikA[$dKr['id']][$x]) / count($HAlter[$dKr['id']]), 4);
+                                            echo '</tr>';
+                                        }
+                                        ?>
+                                    </tbody>
+                                    <tfoot style="background-color: grey;color: white;">
+                                        <td><b>Total</b></td>
+                                        <?php
+                                        foreach ($matrikA[$dKr['id']] as $ny => $nx) {
+                                            $HMatrikA[$dKr['id']][] = array_sum($nx);
+                                            echo '<td>' . array_sum($nx) . '</td>';
+                                        }
+
+                                        ?>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+
+                            <div class="card-body">
+                                <h5>Hasil Normalisasi Kriteria <b><?= $dKr['nama']; ?></b></h5>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <?php
+                                            echo ' <th></th>';
+                                            foreach ($alternatif as $dtAlter) {
+                                                echo ' <th>' . $dtAlter['nama'] . '</th>';
+                                            }
+                                            echo ' <th>P.Vektor</th>';
+                                            echo ' <th>Bobot</th>';
+                                            ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+
+                                        for ($x1 = 1; $x1 <= count($HAlter[$dKr['id']]); $x1++) {
+                                            echo '<tr>';
+                                            echo ' <td>' . $alternatif[$x1]['nama'] . '</td>';
+                                            for ($y1 = 1; $y1 <= count($HAlter[$dKr['id']]); $y1++) {
+                                                echo '<td>' . round(@$matrikA[$dKr['id']][@$y1][$x1] / @$HMatrikA[$dKr['id']][($y1 - 1)], 4) . '</td>';
+                                                $HMatrikB[$dKr['id']][$x1][$y1] = round(@$matrikA[$dKr['id']][@$y1][$x1] / @$HMatrikA[$dKr['id']][($y1 - 1)], 4);
+                                            }
+
+                                            $TVektor[$dKr['id']][] = array_sum($HMatrikB[$dKr['id']][$x1]);
+                                            $TBobot[$dKr['id']][$x1] = round(array_sum($HMatrikB[$dKr['id']][$x1]) / count($HAlter[$dKr['id']]), 4);
+
+                                            echo '<td style="background-color: grey;color: white;">' . round(array_sum($HMatrikB[$dKr['id']][$x1]), 4) . '</td>';
+                                            echo '<td style="background-color: grey;color: white;">' . round(array_sum($HMatrikB[$dKr['id']][$x1]) / count($HAlter[$dKr['id']]), 4) . '</td>';
+                                            echo '</tr>';
+                                        }
+                                        ?>
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        <?php
+                        }
+
+                        ?>
+                        <div class="card-body">
+                            <h3>Hasil Matrik Skor Alternatif</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <?php
+                                        echo ' <th></th>';
+                                        foreach ($kriteria as $dKr) {
+                                            echo ' <th>' . $dKr['nama'] . '</th>';
+                                        }
+                                        ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    foreach ($alternatif as $hx => $value) {
+                                        echo '<tr>';
+                                        echo ' <td>' . $value['nama'] . '</td>';
+                                        foreach ($HAlter as $hy => $vaHy) {
+                                            echo '<td>' . $TBobot[$hy][$hx] . '</td>';
+                                            $HMalternatif[$hy][$hx] = $TBobot[$hy][$hx];
+                                        }
+                                        echo '</tr>';
+                                    }
+
+                                    ?>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <div class="card-body">
+                            <h3>Bobot Kriteria</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <?php
+                                        foreach ($kriteria as $dKr) {
+                                            echo ' <th style="background-color: grey;color: white;">' . $dKr['nama'] . '</th>';
+                                        }
+                                        ?>
+                                    </tr>
+                                    <tr>
+                                        <?php
+                                        foreach ($NilaiBobotKrit as $id_ket => $KrBt) {
+                                            echo ' <th style="background-color: grey;color: white;">' . $KrBt . '</th>';
+                                            $HBKreteria[$id_ket] =  $KrBt;
+                                        }
+
+                                        ?>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <i class="fas fa-table me-1"></i>
+                            Nilai Akhir Perhitungan AHP
+                        </div>
+                        <div class="card-body">
+                            <h3>Bobot Kriteria</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <?php
+
+                                        echo ' <th></th>';
+                                        foreach ($kriteria as $dKr) {
+                                            echo ' <th>' . $dKr['nama'] . '</th>';
+                                        }
+                                        echo ' <th>SCORE</th>';
+                                        echo ' <th>RANGKING</th>';
+                                        ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    foreach ($alternatif as $hmxr => $value) {
+                                        foreach ($HAlter as $hmyr => $vaHmyr) {
+                                            $Score[$hmxr][$hmyr] = number_format(round($HMalternatif[$hmyr][$hmxr], 4) * round($HBKreteria[$hmyr], 4), 4);
+                                        }
+                                        $rangking[$hmxr] = round(array_sum($Score[$hmxr]), 4);
+                                    }
+
+                                    $rank = calculate_rank($rangking);
+
+                                    foreach ($alternatif as $hmx => $value) {
+                                        echo '<tr>';
+                                        echo ' <td>' . $value['nama'] . '</td>';
+                                        foreach ($HAlter as $hmy => $vaHmy) {
+                                            echo '<td>' . number_format(round($HMalternatif[$hmy][$hmx], 4) * round($HBKreteria[$hmy], 4), 4) . '</td>';
+                                        }
+                                        echo '<td style="background-color: grey;color: white;">' . round(array_sum($Score[$hmx]), 4) . '</td>';
+
+                                        echo '<td style="background-color: grey;color: white;">' . $rank[$hmx] . '</td>';
+                                        echo '</tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <?= $this->load->view('_templates/_footer', '', true); ?>
+        </div>
+    </div>
+    <?= $this->load->view('_templates/_js', '', true); ?>
+
+</body>
+
+</html>
