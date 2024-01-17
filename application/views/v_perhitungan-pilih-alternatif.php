@@ -26,7 +26,7 @@
                     </ol>
                     <?php echo form_open('perhitungan/simpan_hitung_alternatif', 'class="form-horizontal"', ['uuid' => $uuid]); ?>
 
-                    <div class="card mb-4">
+                    <div class="card mb-2">
                         <?php
                         $no = 1;
                         foreach ($totalKriteria as $dataKrite) {
@@ -56,7 +56,7 @@
                                                     echo '<td>';
                                                     echo '<select name="nilai' . $no . '_' . $x . '_' . $y . '" class="form-control" required>';
                                                     echo '<option value="">Pilih Perbandingan</option>';
-                                                    echo $this->builder->option('nilai_perbandingan2', 'nilai', '', 'nama');
+                                                    echo $this->builder->option('nilai_perbandingan', 'nilai', '', 'nama');
                                                     echo '</select>';
                                                     echo '</td>';
                                                     echo '<input type="text" name="xy' . $no . '[]" value="' .   $x . '_' . $y . '" hidden>';
@@ -77,7 +77,7 @@
                         ?>
 
                     </div>
-                    <button type="submit" class="btn btn-primary mt-2">Hitung</button>
+                    <button type="submit" class="btn btn-block btn-primary mb-4">Proses Perhitungan Alternatif</button>
 
                     <?php echo form_close() ?>
 

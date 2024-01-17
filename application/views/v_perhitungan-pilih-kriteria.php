@@ -122,7 +122,8 @@
                                     ?>
                                 </tbody>
                             </table>
-                            <button type="submit" class="btn btn-block btn-primary mt-2">Proses Perhitungan</button>
+                            <button type="submit" class="btn btn-block btn-primary mt-2">Proses Perhitungan
+                                Kriteria</button>
                             <?php echo form_close() ?>
                         </div>
                     </div>

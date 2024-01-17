@@ -32,7 +32,15 @@ class Perhitungan extends CI_Controller
   public function kriteria()
   {
     $sql =  $this->builder->select_('', 'kriteria', '', 'id');
+    if ($sql->num_rows() == 0) {
+      $this->session->set_flashdata('error', 'Data Kriteria masih kosong');
+      redirect(base_url('/home'));
+    }
     $sqlN =  $this->builder->select_('', 'nilai_perbandingan', '', 'nilai');
+    if ($sqlN->num_rows() == 0) {
+      $this->session->set_flashdata('error', 'Data Alternatif masih kosong');
+      redirect(base_url('/home'));
+    }
     foreach ($sql->result_array() as $ketA) {
       $data[] = [
         'id' => $ketA['id'],

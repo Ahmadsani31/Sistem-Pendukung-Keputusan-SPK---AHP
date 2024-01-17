@@ -27,7 +27,7 @@
                         <div class="card-body">
                             <h5>Matrik Perbandingan Berpasangan Kriteria</h5>
                             <hr>
-                            <table class="table table-striped">
+                            <table class="table table-striped text-center">
                                 <thead>
                                     <tr>
                                         <?php
@@ -69,7 +69,7 @@
                         <div class="card-body">
                             <h5>Hasil Matrik Normalisasi Kriteria</h5>
                             <hr>
-                            <table class="table table-striped">
+                            <table class="table table-striped text-center">
                                 <thead>
                                     <tr>
                                         <?php
@@ -94,7 +94,11 @@
                                     ?>
                                 </tbody>
                             </table>
-                            <table class="table">
+                        </div>
+                        <div class="card-body">
+                            <h5>Nilai Perbandingan Kriteria</h5>
+                            <hr>
+                            <table class="table text-center">
                                 <thead>
                                     <tr>
                                         <?php
@@ -104,7 +108,6 @@
                                         }
                                         echo ' <th style="background-color: grey;color: white;">JUMLAH (V)</th>';
                                         echo ' <th style="background-color: grey;color: white;">PRIORITAS</th>';
-                                        echo ' <th style="background-color: grey;color: white;">EIGEN VALUE</th>';
                                         ?>
                                     </tr>
                                 </thead>
@@ -113,7 +116,6 @@
 
                                     $TVektorKrit = 0;
                                     $TBobotKrit = 0;
-                                    $TEigenKrit = 0;
                                     for ($xk1 = 1; $xk1 <= count($kriteria); $xk1++) {
                                         echo '<tr>';
                                         echo ' <td>' . @$kriteria[$xk1]['nama'] . '</td>';
@@ -125,12 +127,11 @@
                                         }
                                         $TVektorKrit += array_sum($HMatKritB[$xk1]);
                                         $TBobotKrit += round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4);
-                                        $TEigenKrit += (round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4) * $HMatKritA[$xk1]);
                                         echo '<td style="background-color: grey;color: white;">' . array_sum($HMatKritB[$xk1]) . '</td>';
                                         echo '<td style="background-color: grey;color: white;">' . round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4) . '</td>';
-                                        echo '<td style="background-color: grey;color: white;">' . round(round(array_sum($HMatKritB[$xk1]), 4) / count($kriteria) * round($HMatKritA[$xk1], 4), 4) . '</td>';
 
                                         $NilaiBobotKrit[$kriteria[$xk1]['id']] = round(array_sum($HMatKritB[$xk1]) / count($kriteria), 4);
+                                        $NBKrit[$xk1] = number_format(array_sum($HMatKritB[$xk1]) / count($kriteria), 4);
 
                                         echo '</tr>';
                                     }
@@ -145,7 +146,6 @@
                                     }
                                     echo '<td>' . round($TVektorKrit) . '</td>';
                                     echo '<td>' . round($TBobotKrit) . '</td>';
-                                    echo '<td>' . round($TEigenKrit, 4) . '</td>';
                                     ?>
                                 </tfoot>
                             </table>
@@ -153,7 +153,7 @@
                         <div class="card-body">
                             <h5>Nilai Bobot Kriteria</h5>
                             <hr>
-                            <table class="table">
+                            <table class="table text-center">
                                 <thead>
                                     <tr>
                                         <th>Kriteria</th>
@@ -192,9 +192,48 @@
                                 </tfoot>
                             </table>
                         </div>
+
+                        <div class="card-body">
+                            <h5>Penentuan Consistency Metric</h5>
+                            <hr>
+                            <table class="table text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Kriteria</th>
+                                        <?php
+                                        foreach ($kriteria as $dataKrtiteria) {
+                                            echo ' <th>' . $dataKrtiteria['nama'] . '</th>';
+                                        }
+                                        echo ' <th>Rata-Rata</th>';
+                                        ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    for ($xk2 = 1; $xk2 <= count($kriteria); $xk2++) {
+                                        echo '<tr>';
+                                        echo ' <td>' . @$kriteria[$xk2]['nama'] . '</td>';
+                                        for ($yk2 = 1; $yk2 <= count($kriteria); $yk2++) {
+                                            echo '<td>' . number_format($matKritA[$yk2][$xk2] * $NBKrit[$yk2], 4) . '</td>';
+                                            $HBKrit[$xk2][$yk2] = number_format($matKritA[$yk2][$xk2] * $NBKrit[$yk2], 4);
+                                        }
+                                        echo '<td style="background-color: grey;color: white;">' . number_format(array_sum($HBKrit[$xk2]) / $NBKrit[$xk2], 4) . '</td>';
+                                        $TEigenKrit[$xk2] = (array_sum($HBKrit[$xk2]) / $NBKrit[$xk2]);
+                                    }
+                                    ?>
+                                </tbody>
+                                <tfoot style="background-color: grey;color: white;">
+                                    <td></td>
+                                    <td colspan="4"><b>LambdaMax</b></td>
+                                    <td><?= number_format(array_sum($TEigenKrit) / count($TEigenKrit), 4); ?></td>
+                                </tfoot>
+                            </table>
+                        </div>
+
                         <?php
 
-                        $ci1 = $TEigenKrit - count($kriteria);
+                        $ci1 = number_format(array_sum($TEigenKrit) / count($TEigenKrit), 4) - count($kriteria);
                         $ci2 = count($kriteria) - 1;
 
                         $nilai_ci = $ci1 /   $ci2;
@@ -233,27 +272,27 @@
                             Data Alternatif
                         </div>
                         <?php
-
+                        $noAlter = 1;
                         foreach ($kriteria as $dKr) {
                         ?>
 
-                            <div class="card-body">
-                                <h5>Perhitungan Data Alternatif Kriteria <b><?= $dKr['nama']; ?></b></h5>
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <?php
-                                            echo ' <th></th>';
+                        <div class="card-body">
+                            <h5><?= $noAlter++; ?>.) Perhitungan Alternatif <b><?= $dKr['nama']; ?></b></h5>
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <?php
+                                            echo '<th>' . $dKr['nama'] . '</th>';
                                             foreach ($alternatif as $dtAlter) {
                                                 echo ' <th>' . $dtAlter['nama'] . '</th>';
                                             }
                                             // echo ' <th>P.Vektor</th>';
                                             // echo ' <th>Bobot</th>';
                                             ?>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
                                         for ($x = 1; $x <= count($HAlter[$dKr['id']]); $x++) {
                                             echo '<tr>';
                                             echo ' <td>' . $alternatif[$x]['nama'] . '</td>';
@@ -267,38 +306,37 @@
                                             echo '</tr>';
                                         }
                                         ?>
-                                    </tbody>
-                                    <tfoot style="background-color: grey;color: white;">
-                                        <td><b>Total</b></td>
-                                        <?php
+                                </tbody>
+                                <tfoot style="background-color: grey;color: white;">
+                                    <td><b>Total</b></td>
+                                    <?php
                                         foreach ($matrikA[$dKr['id']] as $ny => $nx) {
                                             $HMatrikA[$dKr['id']][] = array_sum($nx);
                                             echo '<td>' . array_sum($nx) . '</td>';
                                         }
 
                                         ?>
-                                    </tfoot>
-                                </table>
+                                </tfoot>
+                            </table>
 
-                            </div>
+                        </div>
 
-                            <div class="card-body">
-                                <h5>Hasil Normalisasi Kriteria <b><?= $dKr['nama']; ?></b></h5>
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <?php
-                                            echo ' <th></th>';
+                        <div class="card-body">
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <?php
+                                            echo '<th>' . $dKr['nama'] . '</th>';
                                             foreach ($alternatif as $dtAlter) {
                                                 echo ' <th>' . $dtAlter['nama'] . '</th>';
                                             }
                                             echo ' <th>P.Vektor</th>';
                                             echo ' <th>Bobot</th>';
                                             ?>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
                                         for ($x1 = 1; $x1 <= count($HAlter[$dKr['id']]); $x1++) {
                                             echo '<tr>';
@@ -316,18 +354,19 @@
                                             echo '</tr>';
                                         }
                                         ?>
-                                    </tbody>
+                                </tbody>
 
-                                </table>
+                            </table>
 
-                            </div>
+                        </div>
                         <?php
                         }
 
                         ?>
+                        <hr>
                         <div class="card-body">
-                            <h3>Hasil Matrik Skor Alternatif</h3>
-                            <table class="table">
+                            <h5>Hasil Perhitungan Matrik Alternatif</h5>
+                            <table class="table text-center">
                                 <thead>
                                     <tr>
                                         <?php
@@ -357,9 +396,18 @@
                             </table>
 
                         </div>
+
+
+
+                    </div>
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <i class="fas fa-table me-1"></i>
+                            Nilai Akhir Perhitungan AHP
+                        </div>
                         <div class="card-body">
                             <h3>Bobot Kriteria</h3>
-                            <table class="table">
+                            <table class="table text-center">
                                 <thead>
                                     <tr>
                                         <?php
@@ -381,16 +429,7 @@
                             </table>
 
                         </div>
-
-
-                    </div>
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <i class="fas fa-table me-1"></i>
-                            Nilai Akhir Perhitungan AHP
-                        </div>
                         <div class="card-body">
-                            <h3>Bobot Kriteria</h3>
                             <table class="table">
                                 <thead>
                                     <tr>
