@@ -78,7 +78,7 @@
                     targets: 0,
                 }, ],
                 columns: [{
-                    data: 'nomor',
+                    data: null,
                 }, {
                     data: "code",
                 }, {
@@ -87,7 +87,16 @@
                     data: "Action",
                 }, ],
             });
-
+            Dtabel.on('draw.dt', function() {
+                var info = Dtabel.page.info();
+                Dtabel.column(0, {
+                    search: 'applied',
+                    order: 'applied',
+                    page: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + info.start;
+                });
+            });
         });
     });
     </script>

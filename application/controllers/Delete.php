@@ -32,6 +32,7 @@ class Delete extends CI_Controller
     $table =  $this->uri->segment(2);
     $primary =  $this->uri->segment(3);
     $id =  $this->uri->segment(4);
+
     switch ($table) {
       case 'kriteria':
         $values = array(
@@ -45,7 +46,12 @@ class Delete extends CI_Controller
         );
         $param =  $this->builder->HapusN($table, $values);
         break;
-
+      case 'laporan':
+        $values = array(
+          $primary => $id
+        );
+        $param =  $this->builder->HapusN('laporan_perhitungan', $values);
+        break;
       default:
         $param = 0;
         break;

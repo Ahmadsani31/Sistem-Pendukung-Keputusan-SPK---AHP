@@ -38,7 +38,7 @@ class Datatable extends CI_Controller
     switch ($table) {
       case 'kriteria':
 
-        $dt->query('SELECT ROW_NUMBER() OVER (ORDER BY id ASC) AS nomor,id,nama,code FROM kriteria');
+        $dt->query('SELECT id,nama,code FROM kriteria');
         $dt->add('Action', function ($data) {
           $btn = "<a href=" . base_url('kriteria/kelola/') . $data['id'] . " class='btn btn-sm btn-primary mr-2 mb-1'><i class='fa fa-edit'></i> Edit</a>";
           $btn .= "<a href=" . base_url('delete/kriteria/id/') . $data['id'] . " class='btn btn-sm btn-danger mb-1'><i class='fa fa-trash'></i> Hapus</a>";
@@ -48,7 +48,7 @@ class Datatable extends CI_Controller
         break;
       case 'alternatif':
 
-        $dt->query('SELECT ROW_NUMBER() OVER (ORDER BY id ASC) AS nomor,id,nama,code FROM alternatif');
+        $dt->query('SELECT id,nama,code FROM alternatif');
         $dt->add('Action', function ($data) {
           $btn = "<a href=" . base_url('alternatif/kelola/') . $data['id'] . " class='btn btn-sm btn-primary mr-2 mb-1'><i class='fa fa-edit'></i> Edit</a>";
           $btn .= "<a href=" . base_url('delete/alternatif/id/') . $data['id'] . " class='btn btn-sm btn-danger mb-1'><i class='fa fa-trash'></i> Hapus</a>";
@@ -58,9 +58,10 @@ class Datatable extends CI_Controller
         break;
       case 'laporan':
 
-        $dt->query('SELECT ROW_NUMBER() OVER (ORDER BY uuid ASC) AS nomor, uuid,nama,tgl_buat,user_buat FROM laporan_perhitungan ORDER BY tgl_buat DESC');
+        $dt->query('SELECT uuid,nama,tgl_buat,user_buat FROM laporan_perhitungan ORDER BY tgl_buat DESC');
         $dt->add('Action', function ($data) {
           $btn = "<a href=" . base_url('perhitungan/laporan/') . $data['uuid'] . " class='btn btn-sm btn-primary mr-2 mb-1'><i class='fa fa-edit'></i> Lihat</a>";
+          $btn .= "<a href=" . base_url('delete/laporan/uuid/') . $data['uuid'] . " class='btn btn-sm btn-danger mb-1'><i class='fa fa-trash'></i> Hapus</a>";
           return $btn;
         });
         $dt->add('Tanggal', function ($data) {

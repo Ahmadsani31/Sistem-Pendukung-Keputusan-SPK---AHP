@@ -26,8 +26,7 @@
                                 DataTable <?= $title; ?>
                             </div>
 
-                            <a href="<?= base_url('alternatif/kelola/0'); ?>" class="btn btn-primary btn-sm"><i
-                                    class="fa fa-plus"></i> Tambah</a>
+                            <a href="<?= base_url('alternatif/kelola/0'); ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                         <div class="card-body">
                             <table id="DTable" class="table">
@@ -53,40 +52,49 @@
     <?= $this->load->view('_templates/_js', '', true); ?>
 
     <script>
-    var Dtabel;
-    $(document).ready(function() {
-        Dtabel = $("#DTable").DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            order: [],
-            ajax: {
-                url: "<?= base_url() . 'datatable'; ?>",
-                type: "POST",
-                data: function(d) {
-                    d.tabel = 'alternatif';
+        var Dtabel;
+        $(document).ready(function() {
+            Dtabel = $("#DTable").DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                order: [],
+                ajax: {
+                    url: "<?= base_url() . 'datatable'; ?>",
+                    type: "POST",
+                    data: function(d) {
+                        d.tabel = 'alternatif';
+                    },
                 },
-            },
-            columnDefs: [{
-                className: "text-center",
-                targets: ['_all'],
-            }, {
-                searchable: false,
-                orderable: false,
-                targets: 0,
-            }, ],
-            columns: [{
-                data: 'nomor',
-            }, {
-                data: "code",
-            }, {
-                data: "nama",
-            }, {
-                data: "Action",
-            }, ],
+                columnDefs: [{
+                    className: "text-center",
+                    targets: ['_all'],
+                }, {
+                    searchable: false,
+                    orderable: false,
+                    targets: 0,
+                }, ],
+                columns: [{
+                    data: null,
+                }, {
+                    data: "code",
+                }, {
+                    data: "nama",
+                }, {
+                    data: "Action",
+                }, ],
+            });
+            Dtabel.on('draw.dt', function() {
+                var info = Dtabel.page.info();
+                Dtabel.column(0, {
+                    search: 'applied',
+                    order: 'applied',
+                    page: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + info.start;
+                });
+            });
         });
-
-    });
     </script>
 </body>
 
