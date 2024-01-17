@@ -58,16 +58,20 @@ class Datatable extends CI_Controller
         break;
       case 'laporan':
 
-        $dt->query('SELECT uuid,nama,tgl_buat,user_buat FROM laporan_perhitungan ORDER BY tgl_buat DESC');
+        $dt->query('SELECT uuid,nama,tgl_buat,user_buat FROM laporan_perhitungan');
         $dt->add('Action', function ($data) {
           $btn = "<a href=" . base_url('perhitungan/laporan/') . $data['uuid'] . " class='btn btn-sm btn-primary mr-2 mb-1'><i class='fa fa-edit'></i> Lihat</a>";
           $btn .= "<a href=" . base_url('delete/laporan/uuid/') . $data['uuid'] . " class='btn btn-sm btn-danger mb-1'><i class='fa fa-trash'></i> Hapus</a>";
           return $btn;
         });
-        $dt->add('Tanggal', function ($data) {
+        $dt->edit('nama', function ($data) {
+          return $data['nama'];
+        });
+
+        $dt->edit('tgl_buat', function ($data) {
           return TanggalIndo($data['tgl_buat']);
         });
-        echo $dt->generate();
+        echo $dt->generate()->toJson();
         break;
       default:
         # code...
