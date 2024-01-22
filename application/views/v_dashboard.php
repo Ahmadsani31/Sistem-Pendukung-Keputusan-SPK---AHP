@@ -13,13 +13,12 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Dashboard</h1>
+                    <h1 class="mt-4"><?= $title; ?></h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item active"><?= $title; ?></li>
                     </ol>
                     <div class="card  mb-4">
-                        <div
-                            class="card-header bg-success text-white d-flex align-items-center justify-content-between">
+                        <div class="card-header bg-success text-white d-flex align-items-center justify-content-between">
                             <div>
                                 <i class="fas fa-table me-1"></i>
                                 Laporan Pencarian SPK Metode AHP
@@ -78,54 +77,54 @@
     <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.js"></script>
     <script>
-    var Dtabel;
-    $(document).ready(function() {
-        Dtabel = $("#DTable").DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            order: [
-                [2, 'desc'],
-                [3, 'desc']
-            ],
-            ajax: {
-                url: "<?= base_url() . 'datatable'; ?>",
-                type: "POST",
-                data: function(d) {
-                    d.tabel = 'laporan';
+        var Dtabel;
+        $(document).ready(function() {
+            Dtabel = $("#DTable").DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                order: [
+                    [2, 'desc'],
+                    [3, 'desc']
+                ],
+                ajax: {
+                    url: "<?= base_url() . 'datatable'; ?>",
+                    type: "POST",
+                    data: function(d) {
+                        d.tabel = 'laporan';
+                    },
                 },
-            },
-            columnDefs: [{
-                className: "text-center",
-                targets: ['_all'],
-            }, {
-                searchable: false,
-                orderable: false,
-                targets: [0, 4],
-            }, ],
-            columns: [{
-                data: null,
-            }, {
-                data: "uuid",
-            }, {
-                data: "nama",
-            }, {
-                data: "tgl_buat",
-            }, {
-                data: "Action",
-            }, ],
-        });
-        Dtabel.on('draw.dt', function() {
-            var info = Dtabel.page.info();
-            Dtabel.column(0, {
-                search: 'applied',
-                order: 'applied',
-                page: 'applied'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1 + info.start;
+                columnDefs: [{
+                    className: "text-center",
+                    targets: ['_all'],
+                }, {
+                    searchable: false,
+                    orderable: false,
+                    targets: [0, 4],
+                }, ],
+                columns: [{
+                    data: null,
+                }, {
+                    data: "uuid",
+                }, {
+                    data: "nama",
+                }, {
+                    data: "tgl_buat",
+                }, {
+                    data: "Action",
+                }, ],
+            });
+            Dtabel.on('draw.dt', function() {
+                var info = Dtabel.page.info();
+                Dtabel.column(0, {
+                    search: 'applied',
+                    order: 'applied',
+                    page: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + info.start;
+                });
             });
         });
-    });
     </script>
 </body>
 

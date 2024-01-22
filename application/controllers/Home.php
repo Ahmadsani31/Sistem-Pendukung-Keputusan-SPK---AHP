@@ -30,9 +30,16 @@ class Home extends CI_Controller
 
   public function index()
   {
+    if ($_SESSION['level'] == 1) {
+      $data = [
+        'title' => 'Laporan'
+      ];
+    } else {
+      $data = [
+        'title' => 'Dashboard'
+      ];
+    }
 
-
-    $data = [];
     $this->load->view('v_dashboard', $data, FALSE);
   }
 }

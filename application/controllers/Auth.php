@@ -8,8 +8,6 @@ class Auth extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Auth_model', 'auth');
-
-        $this->load->library('RSAencrypt', 'RSAencrypt');
     }
 
     public function index()

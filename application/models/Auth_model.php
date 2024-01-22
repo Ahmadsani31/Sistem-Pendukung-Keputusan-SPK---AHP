@@ -59,6 +59,7 @@ class Auth_model extends CI_Model
           'logged_in' => TRUE,
           'nama'  => $sql->nama,
           'userid'     => $sql->id,
+          'level'     => $sql->level,
         );
         $this->session->set_userdata($newdata);
 
