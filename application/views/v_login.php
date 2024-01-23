@@ -46,10 +46,8 @@
                                     </div>
                                     <p class="mb-0 mt-4">Sampel Akun</p>
                                     <ul>
+					<li>username : pimpinan | password : pimpinan</li>
                                         <li>username : adminspk | password : adminspk</li>
-                                    </ul>
-	 								<ul>
-                                        <li>username : pimpinan | password : pimpinan</li>
                                     </ul>
                                     <?php echo form_close() ?>
                                 </div>
