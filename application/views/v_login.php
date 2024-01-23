@@ -48,6 +48,9 @@
                                     <ul>
                                         <li>username : adminspk | password : adminspk</li>
                                     </ul>
+	 								<ul>
+                                        <li>username : pimpinan | password : pimpinan</li>
+                                    </ul>
                                     <?php echo form_close() ?>
                                 </div>
                             </div>
