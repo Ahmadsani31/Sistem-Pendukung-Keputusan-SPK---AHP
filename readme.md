@@ -2,7 +2,9 @@
 What is CodeIgniter
 ###################
 
-![Example Usage Screenshot](https://dl.dropboxusercontent.com/s/x2xjgg7bnwuj6uv/Screenshot.png)
+## Halaman Login
+
+![Alt Halaman Login](https://i.imgur.com/DqMt4QI.png)
 
 CodeIgniter is an Application Development Framework - a toolkit - for people
 who build web sites using PHP. Its goal is to enable you to develop projects
