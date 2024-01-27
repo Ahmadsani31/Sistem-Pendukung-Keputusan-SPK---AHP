@@ -480,9 +480,6 @@
                                         $nRank[$hmx] =  $rank[$hmx];
                                         echo '</tr>';
                                     }
-                                    echo '<pre>';
-                                    echo print_r($dNAlter);
-                                    echo '</pre>';
                                     $dataInsertRnk = [
                                         'uuid' => $uuid,
                                         'kriteria' => json_encode($dNKrit),
