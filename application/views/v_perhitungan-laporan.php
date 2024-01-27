@@ -163,7 +163,6 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $this->db->empty_table('nilai_kriteria');
                                     $i = 0;
                                     $nilai_persen = 0;
                                     foreach ($kriteria as  $dataKrtiteria) {
@@ -182,7 +181,6 @@
                                         $i++;
                                     }
 
-                                    // $this->db->insert_batch('nilai_kriteria', $insertBobot);
                                     ?>
                                 </tbody>
                                 <tfoot style="background-color: grey;color: white;">
@@ -276,12 +274,12 @@
                         foreach ($kriteria as $dKr) {
                         ?>
 
-                        <div class="card-body">
-                            <h5><?= $noAlter++; ?>.) Perhitungan Alternatif <b><?= $dKr['nama']; ?></b></h5>
-                            <table class="table table-striped text-center">
-                                <thead>
-                                    <tr>
-                                        <?php
+                            <div class="card-body">
+                                <h5><?= $noAlter++; ?>.) Perhitungan Alternatif <b><?= $dKr['nama']; ?></b></h5>
+                                <table class="table table-striped text-center">
+                                    <thead>
+                                        <tr>
+                                            <?php
                                             echo '<th>' . $dKr['nama'] . '</th>';
                                             foreach ($alternatif as $dtAlter) {
                                                 echo ' <th>' . $dtAlter['nama'] . '</th>';
@@ -289,10 +287,10 @@
                                             // echo ' <th>P.Vektor</th>';
                                             // echo ' <th>Bobot</th>';
                                             ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
                                         for ($x = 1; $x <= count($HAlter[$dKr['id']]); $x++) {
                                             echo '<tr>';
                                             echo ' <td>' . $alternatif[$x]['nama'] . '</td>';
@@ -306,26 +304,26 @@
                                             echo '</tr>';
                                         }
                                         ?>
-                                </tbody>
-                                <tfoot style="background-color: grey;color: white;">
-                                    <td><b>Total</b></td>
-                                    <?php
+                                    </tbody>
+                                    <tfoot style="background-color: grey;color: white;">
+                                        <td><b>Total</b></td>
+                                        <?php
                                         foreach ($matrikA[$dKr['id']] as $ny => $nx) {
                                             $HMatrikA[$dKr['id']][] = array_sum($nx);
                                             echo '<td>' . array_sum($nx) . '</td>';
                                         }
 
                                         ?>
-                                </tfoot>
-                            </table>
+                                    </tfoot>
+                                </table>
 
-                        </div>
+                            </div>
 
-                        <div class="card-body">
-                            <table class="table table-striped text-center">
-                                <thead>
-                                    <tr>
-                                        <?php
+                            <div class="card-body">
+                                <table class="table table-striped text-center">
+                                    <thead>
+                                        <tr>
+                                            <?php
                                             echo '<th>' . $dKr['nama'] . '</th>';
                                             foreach ($alternatif as $dtAlter) {
                                                 echo ' <th>' . $dtAlter['nama'] . '</th>';
@@ -333,10 +331,10 @@
                                             echo ' <th>P.Vektor</th>';
                                             echo ' <th>Bobot</th>';
                                             ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
 
                                         for ($x1 = 1; $x1 <= count($HAlter[$dKr['id']]); $x1++) {
                                             echo '<tr>';
@@ -354,11 +352,11 @@
                                             echo '</tr>';
                                         }
                                         ?>
-                                </tbody>
+                                    </tbody>
 
-                            </table>
+                                </table>
 
-                        </div>
+                            </div>
                         <?php
                         }
 
