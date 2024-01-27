@@ -261,6 +261,7 @@ class Perhitungan extends CI_Controller
     $data['HAlter'] = $dataHAlter;
     $data['kriteria'] = $dataKriteria;
     $data['Hkrit'] = $dataKet;
+    $data['uuid'] = $uuid;
     $data['nilai_ri'] = $sqlRI->nilai;
     $this->load->view('v_perhitungan-hasil', $data, FALSE);
   }
@@ -284,6 +285,32 @@ class Perhitungan extends CI_Controller
       ];
       $this->load->view('v_perhitungan-laporan', $data, FALSE);
     }
+  }
+
+  public function laporan_print($uuid)
+  {
+    $this->load->library('pdfgenerator');
+    $data['title'] = "laporan Perhitungan SPK - AHP";
+    $file_pdf = $data['title'];
+    $paper = 'A4';
+    $orientation = "landscape";
+
+    $query = $this->db->get_where('rangking', array('uuid' => $uuid));
+    if ($query->num_rows() > 0) {
+      $sq = $query->row();
+      $data['tampil'] = true;
+
+      $data['kriteria'] = json_decode($sq->kriteria);
+      $data['alternatif'] = json_decode($sq->alternatif);
+      $data['rangking'] = json_decode($sq->rangking);
+      $data['score'] = json_decode($sq->score);
+      $data['nilai'] = json_decode($sq->nilai);
+    } else {
+      $data['tampil'] = false;
+    }
+
+    $html = $this->load->view('v_view-pdf', $data, true);
+    $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
   }
 }
 

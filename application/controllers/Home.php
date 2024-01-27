@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 // Don't forget include/define REST_Controller path
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 /**
  *
@@ -30,6 +32,7 @@ class Home extends CI_Controller
 
   public function index()
   {
+
     if ($_SESSION['level'] == 1) {
       $data = [
         'title' => 'Laporan'

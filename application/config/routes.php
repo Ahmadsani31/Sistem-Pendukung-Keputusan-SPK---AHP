@@ -52,4 +52,4 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['default_controller'] = 'auth';
 $route['delete/(:any)/(:any)/(:any)'] = 'delete/index//$1/$2/$3';
 $route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['translate_uri_dashes'] = true;

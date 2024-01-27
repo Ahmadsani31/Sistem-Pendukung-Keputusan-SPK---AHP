@@ -61,6 +61,7 @@ class Datatable extends CI_Controller
         $dt->query('SELECT uuid,nama,tgl_buat,user_buat FROM laporan_perhitungan');
         $dt->add('Action', function ($data) {
           $btn = "<a href=" . base_url('perhitungan/laporan/') . $data['uuid'] . " class='btn btn-sm btn-primary mr-2 mb-1'><i class='fa fa-edit'></i> Lihat</a>";
+          $btn .= "<a href=" . base_url('perhitungan/laporan-print/') . $data['uuid'] . " target='_blank' class='btn btn-sm btn-info mr-2 mb-1'><i class='fa fa-edit'></i> print</a>";
           $btn .= "<a href=" . base_url('delete/laporan/uuid/') . $data['uuid'] . " class='btn btn-sm btn-danger mb-1'><i class='fa fa-trash'></i> Hapus</a>";
           return $btn;
         });

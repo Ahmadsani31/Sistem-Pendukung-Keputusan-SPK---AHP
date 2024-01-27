@@ -168,12 +168,12 @@
                                 <tbody>
                                     <?php
 
-                                    $this->db->empty_table('nilai_kriteria');
                                     $i = 0;
                                     $nilai_persen = 0;
                                     foreach ($kriteria as  $dataKrtiteria) {
 
                                         $insertBobot[] = [
+                                            'uuid' => $uuid,
                                             'kriteriaid' => $dataKrtiteria['id'],
                                             'bobot' => $NilaiBobotKrit[$dataKrtiteria['id']],
                                         ];
@@ -187,7 +187,11 @@
                                         $i++;
                                     }
 
-                                    $this->db->insert_batch('nilai_kriteria', $insertBobot);
+                                    $sq = $this->db->get_where('nilai_kriteria', array('uuid' => $uuid));
+                                    if ($sq->num_rows() == 0) {
+                                        $this->db->insert_batch('nilai_kriteria', $insertBobot);
+                                    }
+
                                     ?>
                                 </tbody>
                                 <tfoot style="background-color: grey;color: white;">
@@ -277,12 +281,12 @@
                         $noAlter = 1;
                         foreach ($kriteria as $dKr) {
                         ?>
-                        <div class="card-body">
-                            <h5><?= $noAlter++; ?>.) Perhitungan Alternatif <b><?= $dKr['nama']; ?></b></h5>
-                            <table class="table table-striped text-center">
-                                <thead>
-                                    <tr>
-                                        <?php
+                            <div class="card-body">
+                                <h5><?= $noAlter++; ?>.) Perhitungan Alternatif <b><?= $dKr['nama']; ?></b></h5>
+                                <table class="table table-striped text-center">
+                                    <thead>
+                                        <tr>
+                                            <?php
                                             echo ' <th>' . $dKr['nama'] . '</th>';
                                             foreach ($alternatif as $dtAlter) {
                                                 echo ' <th>' . $dtAlter['nama'] . '</th>';
@@ -290,10 +294,10 @@
                                             // echo ' <th>P.Vektor</th>';
                                             // echo ' <th>Bobot</th>';
                                             ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
                                         for ($x = 1; $x <= count($HAlter[$dKr['id']]); $x++) {
                                             echo '<tr>';
                                             echo ' <td>' . $alternatif[$x]['nama'] . '</td>';
@@ -307,27 +311,27 @@
                                             echo '</tr>';
                                         }
                                         ?>
-                                </tbody>
-                                <tfoot style="background-color: grey;color: white;">
-                                    <td><b>Total</b></td>
-                                    <?php
+                                    </tbody>
+                                    <tfoot style="background-color: grey;color: white;">
+                                        <td><b>Total</b></td>
+                                        <?php
                                         foreach ($matrikA[$dKr['id']] as $ny => $nx) {
                                             $HMatrikA[$dKr['id']][] = array_sum($nx);
                                             echo '<td>' . array_sum($nx) . '</td>';
                                         }
 
                                         ?>
-                                </tfoot>
-                            </table>
+                                    </tfoot>
+                                </table>
 
-                        </div>
+                            </div>
 
-                        <div class="card-body">
-                            <!-- <h5>Hasil Normalisasi Kriteria <b><?= $dKr['nama']; ?></b></h5> -->
-                            <table class="table table-striped text-center">
-                                <thead>
-                                    <tr>
-                                        <?php
+                            <div class="card-body">
+                                <!-- <h5>Hasil Normalisasi Kriteria <b><?= $dKr['nama']; ?></b></h5> -->
+                                <table class="table table-striped text-center">
+                                    <thead>
+                                        <tr>
+                                            <?php
                                             echo ' <th style="background-color: grey;color: white;">' . $dKr['nama'] . '</th>';
                                             foreach ($alternatif as $dtAlter) {
                                                 echo ' <th>' . $dtAlter['nama'] . '</th>';
@@ -335,10 +339,10 @@
                                             // echo ' <th>P.Vektor</th>';
                                             echo ' <th>Bobot Prioritas</th>';
                                             ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
 
                                         for ($x1 = 1; $x1 <= count($HAlter[$dKr['id']]); $x1++) {
                                             echo '<tr>';
@@ -356,11 +360,11 @@
                                             echo '</tr>';
                                         }
                                         ?>
-                                </tbody>
+                                    </tbody>
 
-                            </table>
+                                </table>
 
-                        </div>
+                            </div>
                         <?php
                         }
 
@@ -442,6 +446,7 @@
 
                                         echo ' <th></th>';
                                         foreach ($kriteria as $dKr) {
+                                            $dNKrit[$dKr['id']] = $dKr['nama'];
                                             echo ' <th>' . $dKr['nama'] . '</th>';
                                         }
                                         echo ' <th>SCORE</th>';
@@ -461,16 +466,37 @@
                                     $rank = calculate_rank($rangking);
 
                                     foreach ($alternatif as $hmx => $value) {
+                                        $dNAlter[$value['id']] = $value['nama'];
                                         echo '<tr>';
                                         echo ' <td>' . $value['nama'] . '</td>';
                                         foreach ($HAlter as $hmy => $va_krit) {
                                             echo '<td>' . number_format(number_format($HMalternatif[$hmy][$hmx], 4) * number_format($HBKreteria[$hmy], 4), 4) . '</td>';
+                                            $dRank[$value['id']][$hmy] = number_format(number_format($HMalternatif[$hmy][$hmx], 4) * number_format($HBKreteria[$hmy], 4), 4);
                                         }
                                         echo '<td style="background-color: grey;color: white;">' . number_format(array_sum($Score[$hmx]), 4) . '</td>';
-
                                         echo '<td style="background-color: grey;color: white;">' . $rank[$hmx] . '</td>';
+
+                                        $nScore[$hmx] =  number_format(array_sum($Score[$hmx]), 4);
+                                        $nRank[$hmx] =  $rank[$hmx];
                                         echo '</tr>';
                                     }
+                                    echo '<pre>';
+                                    echo print_r($dNAlter);
+                                    echo '</pre>';
+                                    $dataInsertRnk = [
+                                        'uuid' => $uuid,
+                                        'kriteria' => json_encode($dNKrit),
+                                        'alternatif' => json_encode($dNAlter),
+                                        'rangking' => json_encode($dRank),
+                                        'score' => json_encode($nScore),
+                                        'nilai' => json_encode($nRank),
+                                    ];
+
+                                    $sq = $this->db->get_where('rangking', array('uuid' => $uuid));
+                                    if ($sq->num_rows() == 0) {
+                                        $this->db->insert('rangking', $dataInsertRnk);
+                                    }
+
                                     ?>
                                 </tbody>
                             </table>
