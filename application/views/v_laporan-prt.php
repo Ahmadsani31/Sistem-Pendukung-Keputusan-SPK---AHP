@@ -14,26 +14,20 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Kelola <?= $title; ?></h1>
+                    <h1 class="mt-4">Nama Laporan</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active"><?= $title; ?></li>
+                        <li class="breadcrumb-item active">Nama laporan</li>
                     </ol>
 
                     <div class="card mb-4">
                         <div class="card-body">
-                            <?php echo form_open('kriteria/simpan', 'class="form-horizontal"', ['id' => $id]); ?>
+                            <?php echo form_open('perhitungan/laporan_print_pdf', 'class="form-horizontal"', ['uuid' => $uuid]); ?>
                             <div class="form-group">
-                                <label>Kode</label>
-                                <input type="text" name="code" class="form-control" value="<?= $code; ?>"
-                                    placeholder="Tulis Kode">
+                                <label>Nama Pimpinan</label>
+                                <input type="text" name="pimpinan" class="form-control" placeholder="Tulis Nama">
                             </div>
-                            <div class="form-group">
-                                <label>Nama</label>
-                                <input type="text" name="nama" class="form-control" value="<?= $nama; ?>"
-                                    placeholder="Tulis Kriteria">
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-2">Simpan</button>
+                            <button type="submit" class="btn btn-primary mt-2">Print PDF</button>
                             <?php echo form_close() ?>
                         </div>
                     </div>

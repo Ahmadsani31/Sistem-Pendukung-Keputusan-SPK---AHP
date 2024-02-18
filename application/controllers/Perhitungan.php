@@ -289,22 +289,37 @@ class Perhitungan extends CI_Controller
 
   public function laporan_print($uuid)
   {
+    $data['title'] = 'Kriteria';
+    $data['uuid'] = $uuid;
+    $this->load->view('v_laporan-prt', $data, FALSE);
+  }
+
+  public function laporan_print_pdf()
+  {
+
+    $uuid = $this->input->post('uuid');
+    $pimpinan = $this->input->post('pimpinan');
+
     $this->load->library('pdfgenerator');
     $data['title'] = "laporan Perhitungan SPK - AHP";
     $file_pdf = $data['title'];
     $paper = 'A4';
     $orientation = "landscape";
 
-    $query = $this->db->get_where('rangking', array('uuid' => $uuid));
+    $query = $this->db->get_where('laporan_perhitungan', array('uuid' => $uuid));
     if ($query->num_rows() > 0) {
       $sq = $query->row();
-      $data['tampil'] = true;
 
-      $data['kriteria'] = json_decode($sq->kriteria);
-      $data['alternatif'] = json_decode($sq->alternatif);
-      $data['rangking'] = json_decode($sq->rangking);
-      $data['score'] = json_decode($sq->score);
-      $data['nilai'] = json_decode($sq->nilai);
+      $data = [
+        'title' => 'Laporan Hasil Perhitungan SPK Metode AHP',
+        'kriteria' => json_decode($sq->tb_kriteria, true),
+        'alternatif' => json_decode($sq->tb_alternatif, true),
+        'Hkrit' => json_decode($sq->nilai_perbandingan_kriteria, true),
+        'HAlter' => json_decode($sq->nilai_perbandingan_alternatif, true),
+        'nilai_ri' => $sq->nilai_ri,
+        'pimpinan' => $pimpinan,
+        'tampil' => true
+      ];
     } else {
       $data['tampil'] = false;
     }

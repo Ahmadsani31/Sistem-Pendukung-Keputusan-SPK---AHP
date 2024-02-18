@@ -25,13 +25,11 @@
                             <?php echo form_open('alternatif/simpan', 'class="form-horizontal"', ['id' => $id]); ?>
                             <div class="form-group">
                                 <label>Kode</label>
-                                <input type="text" name="code" class="form-control" value="<?= $code; ?>"
-                                    placeholder="Tulis Kode">
+                                <input type="text" name="code" class="form-control" value="<?= $code; ?>" placeholder="Tulis Kode">
                             </div>
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" name="nama" class="form-control" value="<?= $nama; ?>"
-                                    placeholder="Tulis Alternatif">
+                                <input type="text" name="nama" class="form-control" value="<?= $nama; ?>" placeholder="Tulis Alternatif">
                             </div>
                             <button type="submit" class="btn btn-primary mt-2">Simpan</button>
                             <?php echo form_close() ?>
@@ -43,44 +41,6 @@
         </div>
     </div>
     <?= $this->load->view('_templates/_js', '', true); ?>
-    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.js"></script>
-    <script>
-    var Dtabel;
-    $(document).ready(function() {
-        $(document).ready(function() {
-            Dtabel = $("#DTable").DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                order: [],
-                ajax: {
-                    url: "<?= base_url() . 'datatable'; ?>",
-                    type: "POST",
-                    data: function(d) {
-                        d.tabel = 'kriteria';
-                    },
-                },
-                columnDefs: [{
-                    className: "text-center",
-                    targets: ['_all'],
-                }, {
-                    searchable: false,
-                    orderable: false,
-                    targets: 0,
-                }, ],
-                columns: [{
-                    data: 'nomor',
-                }, {
-                    data: "nama",
-                }, {
-                    data: "Action",
-                }, ],
-            });
-
-        });
-    });
-    </script>
 </body>
 
 </html>

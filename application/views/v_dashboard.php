@@ -19,8 +19,7 @@
                     </ol>
 
                     <div class="card  mb-4">
-                        <div
-                            class="card-header bg-success text-white d-flex align-items-center justify-content-between">
+                        <div class="card-header bg-success text-white d-flex align-items-center justify-content-between">
                             <div>
                                 <i class="fas fa-table me-1"></i>
                                 Laporan Pencarian SPK Metode AHP
@@ -74,59 +73,81 @@
             </main>
             <?= $this->load->view('_templates/_footer', '', true); ?>
         </div>
+        <div class="modal" id="myModalPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" onclick="onClose()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="onClose()">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <?= $this->load->view('_templates/_js', '', true); ?>
     <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.js"></script>
     <script>
-    var Dtabel;
-    $(document).ready(function() {
-        Dtabel = $("#DTable").DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            order: [
-                [2, 'desc'],
-                [3, 'desc']
-            ],
-            ajax: {
-                url: "<?= base_url() . 'datatable'; ?>",
-                type: "POST",
-                data: function(d) {
-                    d.tabel = 'laporan';
+        var Dtabel;
+
+
+        $(document).ready(function() {
+
+            Dtabel = $("#DTable").DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                order: [
+                    [2, 'desc'],
+                    [3, 'desc']
+                ],
+                ajax: {
+                    url: "<?= base_url() . 'datatable'; ?>",
+                    type: "POST",
+                    data: function(d) {
+                        d.tabel = 'laporan';
+                    },
                 },
-            },
-            columnDefs: [{
-                className: "text-center",
-                targets: ['_all'],
-            }, {
-                searchable: false,
-                orderable: false,
-                targets: [0, 4],
-            }, ],
-            columns: [{
-                data: null,
-            }, {
-                data: "uuid",
-            }, {
-                data: "nama",
-            }, {
-                data: "tgl_buat",
-            }, {
-                data: "Action",
-            }, ],
-        });
-        Dtabel.on('draw.dt', function() {
-            var info = Dtabel.page.info();
-            Dtabel.column(0, {
-                search: 'applied',
-                order: 'applied',
-                page: 'applied'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1 + info.start;
+                columnDefs: [{
+                    className: "text-center",
+                    targets: ['_all'],
+                }, {
+                    searchable: false,
+                    orderable: false,
+                    targets: [0, 4],
+                }, ],
+                columns: [{
+                    data: null,
+                }, {
+                    data: "uuid",
+                }, {
+                    data: "nama",
+                }, {
+                    data: "tgl_buat",
+                }, {
+                    data: "Action",
+                }, ],
+            });
+            Dtabel.on('draw.dt', function() {
+                var info = Dtabel.page.info();
+                Dtabel.column(0, {
+                    search: 'applied',
+                    order: 'applied',
+                    page: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + info.start;
+                });
             });
         });
-    });
     </script>
 </body>
 
