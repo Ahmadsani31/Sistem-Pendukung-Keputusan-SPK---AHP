@@ -1,10 +1,31 @@
 ###################
-What is CodeIgniter
+# Website Penentuan Kuliatas Tahu dengan perhitungan SPK (SistemPendukungKeputusan) metode AHP (Analytical Hierarchy Process)
 ###################
 
 ## Halaman Login
+![Alt Halaman Login](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/login.png?raw=true)
 
-![Alt Halaman Login](https://i.imgur.com/DqMt4QI.png)
+## Halaman Dashboard
+![Alt Halaman Dashboard](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/home.png?raw=true)
+
+## Halaman Kriteria
+![Alt Halaman Kriteria](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/tabel-kriteria.png?raw=true)
+
+## Halaman Alternatif
+![Alt Halaman Alternatif](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/tabel-alternatif.png?raw=true)
+
+## Halaman Proses Perhitungan
+![Alt Halaman Perhitungan](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/perhitungan1.png?raw=true)
+![Alt Halaman Perhitungan](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/perhitungan2.png?raw=true)
+
+## Halaman Hasil Perhitungan
+![Alt Halaman Perhitungan](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/laporan1.png?raw=true)
+![Alt Halaman Perhitungan](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/laporan2.png?raw=true)
+![Alt Halaman Perhitungan](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/laporan3.png?raw=true)
+
+## Halaman Laporan with PDF
+![Alt Halaman Perhitungan](https://github.com/Ahmadsani31/Sistem-Pendukung-Keputusan-SPK---AHP/blob/main/assets/img/page/laporan-pdf.png?raw=true)
+
 
 CodeIgniter is an Application Development Framework - a toolkit - for people
 who build web sites using PHP. Its goal is to enable you to develop projects
@@ -15,32 +36,21 @@ you creatively focus on your project by minimizing the amount of code needed
 for a given task.
 
 *******************
-Release Information
+# Build
 *******************
-
-This repo contains in-development code for future releases. To download the
-latest stable release please visit the `CodeIgniter Downloads
-<https://codeigniter.com/download>`_ page.
-
-**************************
-Changelog and New Features
-**************************
-
-You can find a list of all changes for each release in the `user
-guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
+## Base Codeigniter 3
+## Php 7.4.3
 
 *******************
-Server Requirements
+# Library
 *******************
-
-PHP version 5.6 or newer is recommended.
-
-It should work on 5.3.7 as well, but we strongly advise you NOT to run
-such old versions of PHP, because of potential security and performance
-issues, as well as missing features.
+Menggunakan dompdf/dompdf 
+``` bash
+composer require dompdf/dompdf
+```
 
 ************
-Installation
+# Installation
 ************
 
 Please see the `installation section <https://codeigniter.com/userguide3/installation/index.html>`_
